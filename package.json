@@ -1,0 +1,60 @@
+{
+  "name": "@leapunion/agentic-runtrace",
+  "version": "0.1.0",
+  "description": "Agentic 思维链·行动链 Run Trace ChatBot — versioned, brand-agnostic UI + engine core (in-process). The ONLY project code is a small Adapter (tools/data). Extracted from the agentic-runtrace-chatbot skill per ADR-0004 (A→B: scaffold-copy → versioned package · kills drift).",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "//": "SKELETON (Phase B step 1 · ADR-0004). The component/engine source moves here from the skill templates/ in B-2; see MANIFEST.md for the file map. Subpath exports split CLIENT UI from the SERVER engine so a project's client bundle never pulls Node fs/path.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./engine": {
+      "types": "./dist/engine/index.d.ts",
+      "import": "./dist/engine/index.js"
+    },
+    "./chat-store": {
+      "types": "./dist/chat-store/index.d.ts",
+      "import": "./dist/chat-store/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "MANIFEST.md"],
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsup src/index.ts src/engine/index.ts src/chat-store/index.ts --format esm --dts --clean --external react --external react-dom --external @iconify/react",
+    "typecheck": "tsc --noEmit",
+    "lint:debrand": "! grep -rniE 'rolife|一号位|LEAP_RUN' src --include='*.ts' --include='*.tsx' | grep -vE '//|scrub'"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "@iconify/react": ">=5"
+  },
+  "peerDependenciesMeta": {
+    "@iconify/react": { "optional": false }
+  },
+  "devDependencies": {
+    "@types/node": ">=20",
+    "@types/react": ">=18",
+    "tsup": ">=8",
+    "typescript": ">=5"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LUAgentTeam/agentic-runtrace.git"
+  },
+  "keywords": [
+    "agentic",
+    "chatbot",
+    "run-trace",
+    "reasoning-action-chain",
+    "leapunion"
+  ]
+}
