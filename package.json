@@ -1,6 +1,6 @@
 {
   "name": "@leapunion/agentic-runtrace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Agentic 思维链·行动链 Run Trace ChatBot — versioned, brand-agnostic UI + engine core (in-process). The ONLY project code is a small Adapter (tools/data). Extracted from the agentic-runtrace-chatbot skill per ADR-0004 (A→B: scaffold-copy → versioned package · kills drift).",
   "license": "UNLICENSED",
   "private": true,

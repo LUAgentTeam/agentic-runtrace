@@ -85,6 +85,7 @@ export function useAgenticRun(apiPath: string = DEFAULT_ENDPOINT): AgenticRunSta
   start: (question: string, model?: string) => Promise<void>;
   approve: () => Promise<void>; // re-runs with approved:true, continuing past the gate
   reset: () => void;
+  stop: () => void; // §5.2 allowInterrupt — abort the in-flight stream, KEEP partial trace (≠ reset)
 } {
   const [run, setRun] = useState<AgenticRun | null>(null);
   const [running, setRunning] = useState(false);
@@ -274,8 +275,18 @@ export function useAgenticRun(apiPath: string = DEFAULT_ENDPOINT): AgenticRunSta
     setError(null);
   }, [abortInFlight]);
 
+  // Interrupt/Stop (§5.2 allowInterrupt): abort the in-flight NDJSON stream but KEEP
+  // the run + already-revealed steps (≠ reset, which clears everything). running flips
+  // off so the UI leaves run mode; the partial reasoning/action trace stays visible.
+  const stop = useCallback(() => {
+    abortInFlight();
+    setRunning(false);
+    setAwaitingApproval(false);
+    setUsage((u) => u ?? "已停止 · interrupted");
+  }, [abortInFlight]);
+
   // Abort any in-flight stream on unmount.
   useEffect(() => () => abortInFlight(), [abortInFlight]);
 
-  return { run, running, awaitingApproval, llm, usage, error, start, approve, reset };
+  return { run, running, awaitingApproval, llm, usage, error, start, approve, reset, stop };
 }
